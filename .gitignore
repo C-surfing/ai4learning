@@ -1,0 +1,9 @@
+# Learner-specific persistent state is local by default.
+# Remove this rule intentionally if you want to version a learning workspace.
+.learning/
+
+# Common local/editor files
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
