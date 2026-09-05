@@ -16,3 +16,20 @@ jobs:
         run: python -m unittest discover -s tests -p 'test_*.py'
       - name: Check repository scaffolding invariants
         run: python tools/learning.py doctor
+
+  workspace:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: apps/workspace
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Install workspace dependencies
+        run: npm install --no-audit --no-fund
+      - name: Typecheck workspace
+        run: npm run typecheck
+      - name: Build workspace
+        run: npm run build
