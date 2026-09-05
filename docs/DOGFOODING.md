@@ -2,57 +2,106 @@
 
 ## Purpose
 
-This document defines how ai4learning improves through real learning sessions. The goal is not benchmark optimization or conversation scoring. The goal is discovering failures in learner modeling and teaching decisions.
+v0.1 established the teaching protocol. The next phase is controlled use against real learning arcs to discover where learner modeling and teaching decisions fail.
 
-## Principle
+The project should evolve from:
 
-Optimize:
-
+```text
+teaching principles
+        ↓
+real learner interaction
+        ↓
+evidence about learner-model / decision failures
+        ↓
+smallest justified protocol change
+        ↓
+stronger longitudinal learning
 ```
-capability_after - capability_before
+
+Optimize `capability_after - capability_before`, not explanation volume or conversational smoothness.
+
+Operational evaluation lives in `../evaluation/`:
+
+- `README.md` defines evidence standards and promotion rules;
+- `SESSION.md` records one meaningful session;
+- `FAILURE-TAXONOMY.md` classifies failures before fixes;
+- `DOMAINS.md` defines the initial five-domain matrix.
+
+## Longitudinal first
+
+A single good tutoring conversation is weak evidence. Prefer arcs that revisit the same learner model across multiple sessions:
+
+```text
+session 1: locate frontier + begin model
+session 2: retrieval + repair / extension
+session 3: transfer + model falsification check
 ```
 
-not explanation volume.
+The key question is not whether the agent remembers facts about the conversation. It is whether it maintains a useful estimate of what the learner can independently do and changes teaching behavior when new evidence arrives.
 
 ## Initial domains
 
-- Probability and statistics: intuition, derivation, transfer.
-- Mathematics: misconception diagnosis and model repair.
-- Paper reading: claims, assumptions, evidence, limitations.
-- Programming and Agent systems: mechanism understanding and debugging.
-- Conceptual learning: mental models and causal reasoning.
+Run real tasks across:
 
-## Session evidence
+1. probability and statistics;
+2. mathematics;
+3. paper reading;
+4. programming / Agent systems;
+5. conceptual learning.
 
-Record:
+The domains intentionally demand different forms of evidence. General teaching logic should improve only from patterns that survive those differences.
 
-- learner goal;
-- current frontier;
-- teaching decision;
-- evidence produced;
-- learner model changes;
-- roadmap changes;
-- failure patterns.
+## What to observe
 
-## Failure categories
+During each arc, look for:
 
-Look for:
-
-- excessive diagnosis;
+- wrong frontier inference;
+- excessive or low-value diagnosis;
 - premature explanation;
-- incorrect mastery inference;
+- stolen discovery steps;
 - weak misconception diagnosis;
+- unjustified mastery promotion;
 - roadmap rigidity;
 - missing prerequisite discovery;
-- insufficient transfer checks.
+- weak longitudinal continuity;
+- insufficient retrieval / transfer evidence;
+- domain strategies that do not match the task;
+- source or tooling friction incorrectly treated as learning difficulty.
+
+Record decisive evidence, not a full transcript.
 
 ## Iteration rule
 
-Do not add rules to SKILL.md because one conversation was inconvenient. First identify whether the failure belongs to:
+When a failure appears:
 
-1. learner state representation;
-2. teaching decision logic;
-3. interaction policy;
-4. missing capability.
+1. classify it using `evaluation/FAILURE-TAXONOMY.md`;
+2. check whether the current state model can represent it;
+3. collect another independent observation when the diagnosis is uncertain;
+4. identify the smallest layer that owns the failure;
+5. define a behavior test that would distinguish the old and repaired behavior;
+6. only then change templates or `SKILL.md`.
 
-Then modify the smallest appropriate layer.
+Do not add rules because one wording pattern failed. Do not encode topic-specific answer logic, benchmark phrases, or learner-specific hacks into the general runtime.
+
+## State evolution before feature expansion
+
+The first expected modifications should be to the learner model and teaching-decision logic, not infrastructure. Only after repeated real sessions justify them should the project add second-layer capabilities such as:
+
+- spaced review scheduling;
+- visual roadmap rendering;
+- Obsidian / Markdown learning logs;
+- researcher subagent;
+- visualizer subagent.
+
+Complexity must be earned by observed need.
+
+## Exit criteria for this phase
+
+Do not declare v0.2 because files were added. A credible v0.2 candidate requires:
+
+- multiple longitudinal arcs across all five domains;
+- recorded capability-delta evidence;
+- a non-trivial set of classified failures;
+- at least one learner-model or teaching-decision improvement justified by repeated evidence;
+- regression scenarios for promoted changes;
+- no loss of the v0.1 principles: natural interaction, decision-value questions, one cognitive move at a time, conservative mastery, and learner-owned discovery.
