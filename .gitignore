@@ -6,6 +6,12 @@
 # Public contributions should use anonymized/minimized cases, not raw learner records.
 .dogfooding/
 
+# Web workspace build/dependency output
+node_modules/
+.next/
+apps/workspace/.next/
+apps/workspace/node_modules/
+
 # Common local/editor files
 .DS_Store
 Thumbs.db
