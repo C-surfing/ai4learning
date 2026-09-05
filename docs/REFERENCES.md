@@ -62,6 +62,21 @@ ai4learning adapts this as a learner-interaction pattern rather than a textbook 
 
 No `textbook-anything` source code, templates, figures, or assets are copied into this repository. The reference is for design principles and attribution; referenced works retain their own licenses.
 
+## wdkns — `tensor-formula-viz`
+
+Source: <https://github.com/wdkns/wdkns-skills/blob/main/skills/tensor-formula-viz/SKILL.md>
+
+This skill is a focused reference for semantically faithful technical visualization. Particularly useful ideas include:
+
+- establish a shape-and-semantics ledger before rendering;
+- choose the smallest visual grammar that exposes the computation;
+- treat symbol kind/domain and axis meaning as first-class semantics, not annotations added after the picture;
+- preserve geometry invariants when shape, transpose, contraction, split, concat, or partition are part of the claim;
+- keep scores, values, indices, masks, and routing objects distinct through the visual pipeline;
+- validate mathematical/semantic correctness separately from visual layout correctness.
+
+ai4learning generalizes these ideas into a representation contract that also applies to causal maps, probability representations, Agent/system dataflow, state diagrams, and other teaching representations. It does not adopt the source skill's house style, rendering pipeline, branding, or topic-specific output format.
+
 ## Feynman technique
 
 The common "explain it in simple words" version is treated here as insufficient. The useful mechanism is reconstructive explanation that reveals gaps in the learner's generative model.

@@ -15,6 +15,8 @@ learner model + current frontier
             ↓
 identify hidden relation / representational friction
             ↓
+build representation contract when semantics are nontrivial
+            ↓
 choose the lowest-friction representation that exposes it
             ↓
 encode semantics faithfully
@@ -27,6 +29,30 @@ keep, revise, switch representation, or remove
 ```
 
 A visual is successful only when the learner can do something cognitively useful with it.
+
+## Build a representation contract before rendering
+
+For a nontrivial visual, especially in mathematics, ML, systems, or causal reasoning, first make an internal ledger of the semantics that the picture must preserve.
+
+A useful contract can include:
+
+| Field | Question |
+|---|---|
+| Object | What is this thing called? |
+| Semantic kind | Value, probability, score, state, event, index, mask, component, evidence, etc.? |
+| Domain / shape / state space | What values or configurations can it take? |
+| Axes / fields | What does each dimension or field mean? |
+| Producer | Where does it come from? |
+| Consumer | What uses it next? |
+| Operation / relation | What transforms, compares, contracts, routes, or connects it? |
+| Invariant | What must remain unchanged for the explanation to be correct? |
+| Learner action | What should the learner be able to read, predict, or reconstruct from the representation? |
+
+Not every diagram needs every field. The purpose is to prevent rendering from inventing semantics.
+
+For tensors this may be a shape-and-axis ledger. For an Agent architecture it may track state ownership, authority, control flow, and data flow. For a causal model it may track variables, direction, intervention, and uncertainty. For a probability representation it may distinguish event, conditional direction, probability mass, frequency, and normalization.
+
+Never collapse distinct semantic objects merely because they have similar shapes or visual roles. A score, an index set, and a mask may participate in one pipeline but are not one object.
 
 ## Choose the representation from the structure
 
@@ -55,6 +81,7 @@ A teaching representation must preserve the semantics that matter to the current
 Make clear what each object is. Distinguish, when relevant:
 
 - values from probabilities;
+- scores from indices or masks;
 - states from observations;
 - data from control;
 - vectors from covectors;
@@ -77,6 +104,10 @@ Why do these two dimensions have to match?
 ### Geometry and layout
 
 Spatial position should mean something when possible. Keep repeated objects visually consistent. Alignment can encode correspondence; distance can encode separation; arrows can encode direction or dependency. Do not use geometry that suggests a false relationship.
+
+When geometry encodes formal structure, preserve geometric invariants. Equal shapes should not silently change size; a transpose should visibly swap the relevant axes; partitions should tile or recombine consistently; contracted dimensions should visually correspond.
+
+Illustrative geometry need not use literal real-world scale, but it must not contradict the relation being taught.
 
 ### Color
 
@@ -166,6 +197,34 @@ inline text / ASCII
 The order is not a quality ranking. A complex renderer is worse than a five-line diagram when the five-line diagram exposes the idea.
 
 When producing an artifact, keep editable source when practical and check the rendered result for unreadable labels, broken layout, cropped content, and misleading encodings.
+
+## Validate semantics separately from rendering
+
+A syntactically valid diagram can still teach the wrong model. Review in this order:
+
+### Semantic audit
+
+- Is every non-obvious object correctly typed and named?
+- Are direction, dependency, causality, and authority represented correctly?
+- Are axes, domains, states, or ranges correct where they matter?
+- Are distinct objects kept distinct through transformations?
+- Does the representation preserve the actual invariant or boundary the explanation depends on?
+
+### Geometry / encoding audit
+
+- Does position, size, shape, arrow direction, grouping, or color imply the intended relation?
+- Are equal or corresponding structures encoded consistently?
+- Are transformations visible rather than merely relabeled?
+- Could the diagram imply a false scale, order, strength, or equivalence?
+
+### Rendering audit
+
+- Are labels legible?
+- Is anything clipped, overlapping, or visually ambiguous?
+- Is the important relation visible at normal reading size?
+- Has secondary annotation crowded out the primary mechanism?
+
+Only after all three pass should the artifact be treated as teaching-ready.
 
 ## Visual roadmap vs visual teaching
 
