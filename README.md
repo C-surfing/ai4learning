@@ -137,7 +137,7 @@ recognition < recall < explanation < application < transfer
 
 Immediate fluency is not treated as long-term mastery. A concept can remain `developing` even after a correct answer; stronger states require stronger, preferably independent evidence.
 
-The v0.2 evaluation phase makes this explicit: longitudinal sessions record capability before/after, the selected cognitive move, decisive learner evidence, learner-model revisions, roadmap revisions, and runtime failures. See [`evaluation/README.md`](evaluation/README.md) and [`docs/DOGFOODING.md`](docs/DOGFOODING.md).
+The v0.2 evaluation phase makes this explicit: longitudinal arcs record capability before/after, selected cognitive moves, decisive learner evidence, learner-model and roadmap revisions, representation switches, later retrieval/transfer, and runtime failures. See [`evaluation/README.md`](evaluation/README.md) and [`evaluation/RUNBOOK.md`](evaluation/RUNBOOK.md).
 
 ## Agent compatibility
 
@@ -151,22 +151,32 @@ See [`docs/USAGE.md`](docs/USAGE.md) for recommended workflows and commands.
 
 - [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) — state model, control loop, persistence, mode selection.
 - [`docs/TEACHING-TASTE.md`](docs/TEACHING-TASTE.md) — the qualitative teaching standard.
-- [`docs/REFERENCES.md`](docs/REFERENCES.md) — sources and inspirations.
+- [`docs/VISUAL-TEACHING.md`](docs/VISUAL-TEACHING.md) — representations as cognitive instruments, semantic contracts, and visual audits.
+- [`docs/PRACTICE-PROGRESSION.md`](docs/PRACTICE-PROGRESSION.md) — connected practice that varies assumptions, boundaries, or representations.
 - [`docs/DOGFOODING.md`](docs/DOGFOODING.md) — longitudinal evidence and iteration protocol.
-- [`evaluation/README.md`](evaluation/README.md) — capability-delta evidence standards and promotion rules.
+- [`docs/SECOND_LAYER_ROADMAP.md`](docs/SECOND_LAYER_ROADMAP.md) — deferred infrastructure and expansion boundaries.
+- [`docs/REFERENCES.md`](docs/REFERENCES.md) — sources and inspirations.
+- [`evaluation/README.md`](evaluation/README.md) — capability-delta evidence standards and execution flow.
+- [`evaluation/ARC.md`](evaluation/ARC.md) — cross-session contract for one longitudinal learning arc.
+- [`evaluation/RUNBOOK.md`](evaluation/RUNBOOK.md) — operational procedure for running real dogfooding.
+- [`evaluation/PROMOTION.md`](evaluation/PROMOTION.md) — evidence gate before changing general Teach/Study rules.
 - [`evaluation/DOMAINS.md`](evaluation/DOMAINS.md) — probability, mathematics, paper reading, programming/Agent, and conceptual-learning test matrix.
+- [`evaluation/REPRESENTATIONS.md`](evaluation/REPRESENTATIONS.md) — evaluate learning value of visual and non-visual representations.
 - [`evaluation/FAILURE-TAXONOMY.md`](evaluation/FAILURE-TAXONOMY.md) — classify failures before modifying the protocol.
-- [`evaluation/SESSION.md`](evaluation/SESSION.md) — template for a meaningful longitudinal session record.
-- [`tests/SCENARIOS.md`](tests/SCENARIOS.md) — behavioral acceptance scenarios for the skill.
+- [`evaluation/SESSION.md`](evaluation/SESSION.md) — template for a meaningful session record.
+- [`evaluation/arcs/`](evaluation/arcs/) — launch briefs for the five required v0.2 arcs.
+- [`tests/SCENARIOS.md`](tests/SCENARIOS.md) — single-session behavioral acceptance scenarios.
+- [`tests/VISUAL-SCENARIOS.md`](tests/VISUAL-SCENARIOS.md) — representation-aware acceptance scenarios.
+- [`tests/LONGITUDINAL-SCENARIOS.md`](tests/LONGITUDINAL-SCENARIOS.md) — cross-session continuity and adaptation scenarios.
 
 ## Influences
 
-This project is strongly influenced by Matt Pocock's stateful `teach` skill, Eero Alvar's AI-learning workflow and learning philosophy, the Feynman technique, zone-of-proximal-development thinking, desirable difficulty, retrieval practice, and the teaching style exemplified by explanations that make ideas feel discoverable rather than decreed.
+This project is strongly influenced by Matt Pocock's stateful `teach` skill, Eero Alvar's AI-learning workflow and learning philosophy, the Feynman technique, zone-of-proximal-development thinking, desirable difficulty, retrieval practice, 3Blue1Brown-style motivated representations, Alchemist-Jo's `textbook-anything`, and `tensor-formula-viz`'s semantically faithful technical visualization discipline.
 
-The project intentionally does not clone any one of those systems. It turns the shared ideas into a compact learner-model protocol with a dynamic roadmap and natural interaction layer.
+The project intentionally does not clone any one of those systems. It turns compatible ideas into a compact learner-model protocol with a dynamic roadmap, natural interaction layer, representation-aware teaching, and evidence-driven iteration.
 
 ## Status
 
 **v0.1 — complete first usable protocol.** Teach + Study, persistent learner state, dynamic roadmap, evidence-aware mastery, Feynman model debugging, teaching taste, bootstrap/agent metadata, and behavioral acceptance scenarios are in place.
 
-**v0.2 — evidence phase in progress.** The current priority is longitudinal dogfooding across probability/statistics, mathematics, paper reading, programming/Agent systems, and conceptual learning. New teaching rules should be promoted only when real learner evidence identifies a repeated or structural failure. Second-layer features such as scheduling, visual roadmaps, Obsidian integration, and subagents remain intentionally deferred until that evidence justifies them.
+**v0.2 — longitudinal evidence phase in progress.** The evaluation execution layer is now in place: arc contracts, runbook, five domain briefs, representation evaluation, failure taxonomy, promotion gates, and longitudinal regression scenarios are available. The five real learner arcs are **not yet complete** and must remain evidence-driven; no simulated learner outcome counts as progress. General teaching rules should be promoted only when real learner evidence identifies a repeated or structural failure. Scheduling, visual-roadmap rendering, Obsidian integration, and specialized subagents remain deferred until evidence justifies them.
