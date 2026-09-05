@@ -1,6 +1,10 @@
 # Learner-specific persistent state is local by default.
-# Remove this rule intentionally if you want to version a learning workspace.
+# Remove this rule intentionally only if you understand the privacy implications.
 .learning/
+
+# Raw longitudinal dogfooding evidence is also local by default.
+# Public contributions should use anonymized/minimized cases, not raw learner records.
+.dogfooding/
 
 # Common local/editor files
 .DS_Store

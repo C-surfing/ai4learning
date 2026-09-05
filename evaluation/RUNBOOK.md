@@ -2,11 +2,28 @@
 
 This runbook turns the v0.2 evaluation design into a repeatable workflow for real learning sessions.
 
+## Private evidence workspace
+
+Real learner state and raw dogfooding evidence are local by default.
+
+Use:
+
+```text
+.learning/      # operational learner state
+.dogfooding/    # raw arc/session evidence and private notes
+```
+
+Both paths are ignored by Git by default. Keep raw transcripts, identifiable learner details, private course material, unpublished papers, account information, and other sensitive context out of the public repository.
+
+The public `evaluation/` directory contains protocols and templates. If a real failure is worth contributing publicly, reduce it to the minimum anonymized evidence needed to understand the runtime behavior. See `evaluation/PRIVACY.md`.
+
+Synthetic acceptance scenarios are allowed in `tests/`, but they must never be counted as real dogfooding evidence.
+
 ## 0. Before the arc
 
 1. Choose one real learner mission and one domain arc.
 2. Read the current `.learning/MISSION.md`, `LEARNER.md`, `ROADMAP.md`, and `STATE.md` if they exist.
-3. Copy the arc brief for the chosen domain and fill only the **starting assumptions**.
+3. Copy the arc brief for the chosen domain into the local `.dogfooding/` workspace and fill only the **starting assumptions**.
 4. Do not invent learner evidence, expected success, or final mastery state.
 5. Identify one capability that could plausibly change during the arc.
 
@@ -14,7 +31,7 @@ This runbook turns the v0.2 evaluation design into a repeatable workflow for rea
 
 Use the normal Teach or Study skill. Do not expose evaluation machinery to the learner unless useful.
 
-After the interaction, complete one `evaluation/SESSION.md` record from decisive evidence only.
+After the interaction, copy `evaluation/SESSION.md` into the local `.dogfooding/` arc and complete it from decisive evidence only.
 
 Capture:
 
@@ -27,7 +44,7 @@ Capture:
 - whether the roadmap or state changed;
 - any runtime failure label.
 
-Do not copy the full transcript into the record.
+Do not copy the full transcript into the record unless there is a specific local research reason. Usually a minimized evidence excerpt or structured observation is stronger and safer.
 
 ## 2. Preserve longitudinal dependence
 
@@ -78,20 +95,31 @@ Record scaffold dependence explicitly.
 
 After the final planned session:
 
-1. complete the outcome section in `evaluation/ARC.md`;
+1. complete the outcome section in the local copy of `evaluation/ARC.md`;
 2. classify runtime failures using `FAILURE-TAXONOMY.md`;
 3. compare early and late learner-model hypotheses;
 4. identify whether scaffolding actually receded;
 5. identify whether apparent learning survived retrieval or transfer;
 6. decide whether the evidence supports a runtime change.
 
-## 7. Promotion gate
+## 7. Public evidence reduction
+
+Only if evidence justifies a repository change, prepare a minimized public case:
+
+1. remove learner identity and unrelated personal context;
+2. remove private source text or replace it with an abstract description;
+3. preserve only the behavior needed to support the failure classification;
+4. state whether the evidence came from one session, repeated sessions, or multiple arcs;
+5. keep uncertainty explicit;
+6. never present a synthetic reconstruction as the original learner interaction.
+
+## 8. Promotion gate
 
 Do not edit `skills/teach/SKILL.md` or `skills/study/SKILL.md` merely because an arc felt awkward.
 
 Use `evaluation/PROMOTION.md` first. A general protocol change should normally require repeated evidence across independent sessions/arcs or a clearly structural high-consequence failure.
 
-## 8. What counts as a completed dogfood arc
+## 9. What counts as a completed dogfood arc
 
 A completed arc is not "three chats happened". It has:
 
