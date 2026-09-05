@@ -1,0 +1,290 @@
+#!/usr/bin/env python3
+"""Local workspace and longitudinal-evaluation helpers for ai4learning.
+
+This tool intentionally does not teach and does not infer learner state. It only
+scaffolds local files so the Teach/Study skills can remain natural-language
+first while real longitudinal evidence stays structured and private by default.
+"""
+
+from __future__ import annotations
+
+import argparse
+import re
+import shutil
+from datetime import datetime, timezone
+from pathlib import Path
+
+TEMPLATE_FILES = ("MISSION.md", "LEARNER.md", "ROADMAP.md", "STATE.md")
+DOMAIN_FILES = {
+    "probability": "01-probability.md",
+    "mathematics": "02-mathematics.md",
+    "paper-reading": "03-paper-reading.md",
+    "programming-agent": "04-programming-agent.md",
+    "conceptual": "05-conceptual.md",
+}
+
+
+class LearningToolError(RuntimeError):
+    """Expected user-facing error from local workspace operations."""
+
+
+def repo_root_from_script() -> Path:
+    return Path(__file__).resolve().parents[1]
+
+
+def slugify(value: str) -> str:
+    """Produce a readable filesystem-safe slug while preserving Unicode letters."""
+    value = value.strip().lower()
+    pieces: list[str] = []
+    pending_dash = False
+    for char in value:
+        if char.isalnum():
+            if pending_dash and pieces:
+                pieces.append("-")
+            pieces.append(char)
+            pending_dash = False
+        else:
+            pending_dash = True
+    slug = "".join(pieces).strip("-")
+    if not slug:
+        raise LearningToolError("name must contain at least one letter or digit")
+    return slug
+
+
+def require_file(path: Path, label: str) -> None:
+    if not path.is_file():
+        raise LearningToolError(f"missing {label}: {path}")
+
+
+def copy_without_overwrite(src: Path, dst: Path) -> bool:
+    if dst.exists():
+        return False
+    dst.parent.mkdir(parents=True, exist_ok=True)
+    shutil.copyfile(src, dst)
+    return True
+
+
+def init_learning(repo_root: Path) -> list[Path]:
+    """Initialize missing .learning files without overwriting learner state."""
+    templates = repo_root / "templates"
+    learning = repo_root / ".learning"
+    learning.mkdir(parents=True, exist_ok=True)
+    (learning / "records").mkdir(exist_ok=True)
+    (learning / "references").mkdir(exist_ok=True)
+
+    created: list[Path] = []
+    for name in TEMPLATE_FILES:
+        src = templates / name
+        require_file(src, f"template {name}")
+        dst = learning / name
+        if copy_without_overwrite(src, dst):
+            created.append(dst)
+    return created
+
+
+def next_arc_id(root: Path, domain: str, name: str) -> str:
+    stamp = datetime.now(timezone.utc).strftime("%Y%m%d")
+    base = f"{stamp}-{slugify(domain)}-{slugify(name)}"
+    candidate = base
+    suffix = 2
+    while (root / candidate).exists():
+        candidate = f"{base}-{suffix}"
+        suffix += 1
+    return candidate
+
+
+def start_arc(repo_root: Path, domain: str, name: str) -> Path:
+    """Create a private local arc with brief, arc record, and first session."""
+    if domain not in DOMAIN_FILES:
+        choices = ", ".join(DOMAIN_FILES)
+        raise LearningToolError(f"unknown domain '{domain}'. choose one of: {choices}")
+
+    dogfooding = repo_root / ".dogfooding"
+    dogfooding.mkdir(parents=True, exist_ok=True)
+
+    arc_dir = dogfooding / next_arc_id(dogfooding, domain, name)
+    arc_dir.mkdir()
+    (arc_dir / "sessions").mkdir()
+
+    sources = {
+        repo_root / "evaluation" / "ARC.md": arc_dir / "ARC.md",
+        repo_root / "evaluation" / "SESSION.md": arc_dir / "sessions" / "001.md",
+        repo_root / "evaluation" / "arcs" / DOMAIN_FILES[domain]: arc_dir / "BRIEF.md",
+    }
+    for src, dst in sources.items():
+        require_file(src, src.as_posix())
+        shutil.copyfile(src, dst)
+
+    (arc_dir / "README.md").write_text(
+        "# Local longitudinal arc\n\n"
+        f"- Domain: `{domain}`\n"
+        f"- Working name: `{name}`\n"
+        "- Raw learner evidence: local-only by default\n\n"
+        "Use `BRIEF.md` to preserve the domain intent, `ARC.md` for cross-session "
+        "state, and `sessions/NNN.md` for decisive session evidence. Keep raw "
+        "transcripts out unless they are genuinely needed for local research.\n",
+        encoding="utf-8",
+    )
+    return arc_dir
+
+
+def resolve_arc(repo_root: Path, arc: str) -> Path:
+    candidate = Path(arc)
+    if not candidate.is_absolute():
+        direct = repo_root / candidate
+        local = repo_root / ".dogfooding" / candidate
+        candidate = direct if direct.is_dir() else local
+
+    candidate = candidate.resolve()
+    private_root = (repo_root / ".dogfooding").resolve()
+    try:
+        candidate.relative_to(private_root)
+    except ValueError as exc:
+        raise LearningToolError("arc must live under .dogfooding/") from exc
+
+    if not candidate.is_dir():
+        raise LearningToolError(f"arc directory not found: {candidate}")
+    return candidate
+
+
+def new_session(repo_root: Path, arc: str) -> Path:
+    """Create the next numbered session record without overwriting old evidence."""
+    arc_dir = resolve_arc(repo_root, arc)
+    sessions = arc_dir / "sessions"
+    sessions.mkdir(exist_ok=True)
+
+    existing: list[int] = []
+    for path in sessions.glob("[0-9][0-9][0-9].md"):
+        try:
+            existing.append(int(path.stem))
+        except ValueError:
+            continue
+
+    next_num = max(existing, default=0) + 1
+    dst = sessions / f"{next_num:03d}.md"
+    src = repo_root / "evaluation" / "SESSION.md"
+    require_file(src, "evaluation/SESSION.md")
+    shutil.copyfile(src, dst)
+    return dst
+
+
+def list_arcs(repo_root: Path) -> list[Path]:
+    root = repo_root / ".dogfooding"
+    if not root.is_dir():
+        return []
+    return sorted(path for path in root.iterdir() if path.is_dir())
+
+
+def doctor(repo_root: Path) -> list[str]:
+    """Check repository invariants needed by the local runner."""
+    problems: list[str] = []
+
+    for name in TEMPLATE_FILES:
+        if not (repo_root / "templates" / name).is_file():
+            problems.append(f"missing templates/{name}")
+
+    required_eval = (
+        "ARC.md",
+        "SESSION.md",
+        "RUNBOOK.md",
+        "PRIVACY.md",
+        "PROMOTION.md",
+        "FAILURE-TAXONOMY.md",
+    )
+    for name in required_eval:
+        if not (repo_root / "evaluation" / name).is_file():
+            problems.append(f"missing evaluation/{name}")
+
+    for filename in DOMAIN_FILES.values():
+        if not (repo_root / "evaluation" / "arcs" / filename).is_file():
+            problems.append(f"missing evaluation/arcs/{filename}")
+
+    gitignore = repo_root / ".gitignore"
+    if not gitignore.is_file():
+        problems.append("missing .gitignore")
+    else:
+        text = gitignore.read_text(encoding="utf-8")
+        for ignored in (".learning/", ".dogfooding/"):
+            if ignored not in text:
+                problems.append(f".gitignore does not protect {ignored}")
+
+    return problems
+
+
+def build_parser() -> argparse.ArgumentParser:
+    parser = argparse.ArgumentParser(
+        prog="learning.py",
+        description="Local workspace/evaluation scaffolding for ai4learning.",
+    )
+    sub = parser.add_subparsers(dest="command", required=True)
+
+    sub.add_parser("init", help="create missing .learning/ files from templates")
+
+    start = sub.add_parser("start-arc", help="create a local longitudinal arc")
+    start.add_argument("domain", choices=tuple(DOMAIN_FILES))
+    start.add_argument("name", help="short working name, e.g. bayes-base-rate")
+
+    session = sub.add_parser("new-session", help="create the next session record")
+    session.add_argument("arc", help="arc directory name or path under .dogfooding/")
+
+    sub.add_parser("status", help="show local learning/evaluation workspace status")
+    sub.add_parser("doctor", help="check repository scaffolding invariants")
+    return parser
+
+
+def main(argv: list[str] | None = None, repo_root: Path | None = None) -> int:
+    parser = build_parser()
+    args = parser.parse_args(argv)
+    root = (repo_root or repo_root_from_script()).resolve()
+
+    try:
+        if args.command == "init":
+            created = init_learning(root)
+            if created:
+                print("Created:")
+                for path in created:
+                    print(f"  {path.relative_to(root)}")
+            else:
+                print(".learning/ already initialized; no files overwritten.")
+            return 0
+
+        if args.command == "start-arc":
+            init_learning(root)
+            arc_dir = start_arc(root, args.domain, args.name)
+            print(f"Created {arc_dir.relative_to(root)}")
+            print("Start with BRIEF.md, then fill ARC.md and sessions/001.md from real evidence.")
+            return 0
+
+        if args.command == "new-session":
+            path = new_session(root, args.arc)
+            print(f"Created {path.relative_to(root)}")
+            return 0
+
+        if args.command == "status":
+            learning = root / ".learning"
+            print(f"Learning workspace: {'present' if learning.is_dir() else 'not initialized'}")
+            arcs = list_arcs(root)
+            print(f"Local arcs: {len(arcs)}")
+            for arc in arcs:
+                sessions = len(list((arc / "sessions").glob("[0-9][0-9][0-9].md")))
+                print(f"  {arc.name}: {sessions} session record(s)")
+            return 0
+
+        if args.command == "doctor":
+            problems = doctor(root)
+            if problems:
+                print("Repository checks failed:")
+                for problem in problems:
+                    print(f"  - {problem}")
+                return 1
+            print("Repository scaffolding checks passed.")
+            return 0
+
+    except LearningToolError as exc:
+        parser.error(str(exc))
+
+    return 2
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())
