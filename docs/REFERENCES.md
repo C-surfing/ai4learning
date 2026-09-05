@@ -35,6 +35,33 @@ Important ideas carried forward:
 
 `ai4learning` intentionally relaxes rigid phase exposure: the control loop remains internal while the interaction remains conversational.
 
+## Alchemist-Jo — `textbook-anything`
+
+Repository: <https://github.com/Alchemist-Jo/textbook-anything>
+
+`textbook-anything` is a textbook / course-material generation skill rather than a longitudinal learner-model runtime, so ai4learning does not adopt its product surface directly. It is nevertheless a strong reference for two design areas.
+
+### Representations as teaching instruments
+
+Its figure guidance starts from the relation a figure should make easier to understand, keeps labels and geometry semantically meaningful, and treats matrix / tensor shapes, axes, contraction, transposition, and object roles as part of the explanation rather than visual decoration.
+
+This reinforced ai4learning's distinction between:
+
+```text
+visual teaching capability — core
+visualization automation / renderer / subagent — optional infrastructure
+```
+
+The corresponding ai4learning design is documented in [`VISUAL-TEACHING.md`](VISUAL-TEACHING.md).
+
+### Connected exercise progression
+
+Its exercise design reuses one mathematical or technical object while changing an assumption, boundary condition, representation, implementation convention, or special case. Immediate practice checks a local idea; later connected problems test synthesis and transfer.
+
+ai4learning adapts this as a learner-interaction pattern rather than a textbook worksheet format. See [`PRACTICE-PROGRESSION.md`](PRACTICE-PROGRESSION.md).
+
+No `textbook-anything` source code, templates, figures, or assets are copied into this repository. The reference is for design principles and attribution; referenced works retain their own licenses.
+
 ## Feynman technique
 
 The common "explain it in simple words" version is treated here as insufficient. The useful mechanism is reconstructive explanation that reveals gaps in the learner's generative model.
