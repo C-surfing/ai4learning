@@ -137,6 +137,8 @@ recognition < recall < explanation < application < transfer
 
 Immediate fluency is not treated as long-term mastery. A concept can remain `developing` even after a correct answer; stronger states require stronger, preferably independent evidence.
 
+The v0.2 evaluation phase makes this explicit: longitudinal sessions record capability before/after, the selected cognitive move, decisive learner evidence, learner-model revisions, roadmap revisions, and runtime failures. See [`evaluation/README.md`](evaluation/README.md) and [`docs/DOGFOODING.md`](docs/DOGFOODING.md).
+
 ## Agent compatibility
 
 The primary skill lives at [`skills/teach/SKILL.md`](skills/teach/SKILL.md). A thin [`skills/study/SKILL.md`](skills/study/SKILL.md) entry activates the same protocol with a study-first posture.
@@ -145,11 +147,16 @@ For agents with native skill loading, copy or symlink the relevant skill directo
 
 See [`docs/USAGE.md`](docs/USAGE.md) for recommended workflows and commands.
 
-## Design documents
+## Design and evaluation documents
 
 - [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) — state model, control loop, persistence, mode selection.
 - [`docs/TEACHING-TASTE.md`](docs/TEACHING-TASTE.md) — the qualitative teaching standard.
 - [`docs/REFERENCES.md`](docs/REFERENCES.md) — sources and inspirations.
+- [`docs/DOGFOODING.md`](docs/DOGFOODING.md) — longitudinal evidence and iteration protocol.
+- [`evaluation/README.md`](evaluation/README.md) — capability-delta evidence standards and promotion rules.
+- [`evaluation/DOMAINS.md`](evaluation/DOMAINS.md) — probability, mathematics, paper reading, programming/Agent, and conceptual-learning test matrix.
+- [`evaluation/FAILURE-TAXONOMY.md`](evaluation/FAILURE-TAXONOMY.md) — classify failures before modifying the protocol.
+- [`evaluation/SESSION.md`](evaluation/SESSION.md) — template for a meaningful longitudinal session record.
 - [`tests/SCENARIOS.md`](tests/SCENARIOS.md) — behavioral acceptance scenarios for the skill.
 
 ## Influences
@@ -160,4 +167,6 @@ The project intentionally does not clone any one of those systems. It turns the 
 
 ## Status
 
-**v0.1 — complete first usable protocol.** The emphasis is on getting the teaching logic right before building a large UI or learning platform.
+**v0.1 — complete first usable protocol.** Teach + Study, persistent learner state, dynamic roadmap, evidence-aware mastery, Feynman model debugging, teaching taste, bootstrap/agent metadata, and behavioral acceptance scenarios are in place.
+
+**v0.2 — evidence phase in progress.** The current priority is longitudinal dogfooding across probability/statistics, mathematics, paper reading, programming/Agent systems, and conceptual learning. New teaching rules should be promoted only when real learner evidence identifies a repeated or structural failure. Second-layer features such as scheduling, visual roadmaps, Obsidian integration, and subagents remain intentionally deferred until that evidence justifies them.
