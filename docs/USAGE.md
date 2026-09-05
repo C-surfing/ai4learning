@@ -101,7 +101,15 @@ Then diagnose what failed.
 
 ## Persistent workspace setup
 
-You may pre-create state from the templates:
+The recommended low-friction setup is:
+
+```bash
+python tools/learning.py init
+```
+
+This creates missing files from `templates/` under `.learning/` plus `records/` and `references/`. Existing learner state is never overwritten.
+
+Manual setup remains valid:
 
 ```text
 mkdir -p .learning/records .learning/references
@@ -111,7 +119,32 @@ cp templates/ROADMAP.md .learning/ROADMAP.md
 cp templates/STATE.md .learning/STATE.md
 ```
 
-This is optional. The agent can create files when needed.
+Both approaches are optional. The agent can create files progressively when needed.
+
+## Running a v0.2 longitudinal arc
+
+Real evaluation evidence is local by default. Start an arc with:
+
+```bash
+python tools/learning.py start-arc probability bayes-base-rate
+```
+
+This creates a dated `.dogfooding/<arc>/` directory containing the selected domain brief, an arc record, and `sessions/001.md`. `.dogfooding/` is Git-ignored by default.
+
+For the next meaningful session:
+
+```bash
+python tools/learning.py new-session <arc>
+```
+
+Inspect local scaffolding without printing learner evidence:
+
+```bash
+python tools/learning.py status
+python tools/learning.py doctor
+```
+
+The helper does not choose teaching moves or infer mastery. Follow [`../evaluation/RUNBOOK.md`](../evaluation/RUNBOOK.md) for the actual evidence protocol and [`../evaluation/PRIVACY.md`](../evaluation/PRIVACY.md) before publishing any case derived from real learners.
 
 ## Recommended workflow
 
@@ -148,6 +181,8 @@ The protocol is designed for natural language rather than a command-heavy interf
 ```
 
 They should map to the same underlying state model; they are convenience interfaces, not separate systems.
+
+The Python helper is likewise optional. It handles local files and evaluation scaffolding; it is not a user-facing teaching command language.
 
 ## What should be visible to the learner?
 
