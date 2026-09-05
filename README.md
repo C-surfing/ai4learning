@@ -147,6 +147,22 @@ For agents with native skill loading, copy or symlink the relevant skill directo
 
 See [`docs/USAGE.md`](docs/USAGE.md) for recommended workflows and commands.
 
+## Local runner
+
+The protocol remains usable without tooling, but v0.2 includes a tiny standard-library helper that removes repeated workspace bookkeeping without moving teaching policy into code:
+
+```bash
+python tools/learning.py init
+python tools/learning.py start-arc probability bayes-base-rate
+python tools/learning.py new-session <arc>
+python tools/learning.py status
+python tools/learning.py doctor
+```
+
+`init` never overwrites existing learner state. Real arc evidence is scaffolded under Git-ignored `.dogfooding/`, while `.learning/` remains the operational learner state. The runner does not infer mastery, select teaching moves, or revise the roadmap; those remain responsibilities of the Teach/Study protocol.
+
+The repository now has automated CI for the runner and repository invariants. See [`tools/README.md`](tools/README.md).
+
 ## Design and evaluation documents
 
 - [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) — state model, control loop, persistence, mode selection.
@@ -159,12 +175,14 @@ See [`docs/USAGE.md`](docs/USAGE.md) for recommended workflows and commands.
 - [`evaluation/README.md`](evaluation/README.md) — capability-delta evidence standards and execution flow.
 - [`evaluation/ARC.md`](evaluation/ARC.md) — cross-session contract for one longitudinal learning arc.
 - [`evaluation/RUNBOOK.md`](evaluation/RUNBOOK.md) — operational procedure for running real dogfooding.
+- [`evaluation/PRIVACY.md`](evaluation/PRIVACY.md) — local/private learner-evidence boundary and public minimization rules.
 - [`evaluation/PROMOTION.md`](evaluation/PROMOTION.md) — evidence gate before changing general Teach/Study rules.
 - [`evaluation/DOMAINS.md`](evaluation/DOMAINS.md) — probability, mathematics, paper reading, programming/Agent, and conceptual-learning test matrix.
 - [`evaluation/REPRESENTATIONS.md`](evaluation/REPRESENTATIONS.md) — evaluate learning value of visual and non-visual representations.
 - [`evaluation/FAILURE-TAXONOMY.md`](evaluation/FAILURE-TAXONOMY.md) — classify failures before modifying the protocol.
 - [`evaluation/SESSION.md`](evaluation/SESSION.md) — template for a meaningful session record.
 - [`evaluation/arcs/`](evaluation/arcs/) — launch briefs for the five required v0.2 arcs.
+- [`tools/README.md`](tools/README.md) — local workspace / arc runner and CI commands.
 - [`tests/SCENARIOS.md`](tests/SCENARIOS.md) — single-session behavioral acceptance scenarios.
 - [`tests/VISUAL-SCENARIOS.md`](tests/VISUAL-SCENARIOS.md) — representation-aware acceptance scenarios.
 - [`tests/LONGITUDINAL-SCENARIOS.md`](tests/LONGITUDINAL-SCENARIOS.md) — cross-session continuity and adaptation scenarios.
@@ -179,4 +197,4 @@ The project intentionally does not clone any one of those systems. It turns comp
 
 **v0.1 — complete first usable protocol.** Teach + Study, persistent learner state, dynamic roadmap, evidence-aware mastery, Feynman model debugging, teaching taste, bootstrap/agent metadata, and behavioral acceptance scenarios are in place.
 
-**v0.2 — longitudinal evidence phase in progress.** The evaluation execution layer is now in place: arc contracts, runbook, five domain briefs, representation evaluation, failure taxonomy, promotion gates, and longitudinal regression scenarios are available. The five real learner arcs are **not yet complete** and must remain evidence-driven; no simulated learner outcome counts as progress. General teaching rules should be promoted only when real learner evidence identifies a repeated or structural failure. Scheduling, visual-roadmap rendering, Obsidian integration, and specialized subagents remain deferred until evidence justifies them.
+**v0.2 — longitudinal evidence phase in progress.** The evaluation execution layer and local runner are now in place: arc contracts, runbook, five domain briefs, representation evaluation, failure taxonomy, promotion gates, privacy boundaries, longitudinal regression scenarios, unit tests, and CI are available. The five real learner arcs are **not yet complete** and must remain evidence-driven; no simulated learner outcome counts as progress. General teaching rules should be promoted only when real learner evidence identifies a repeated or structural failure. Scheduling, visual-roadmap rendering, Obsidian integration, and specialized subagents remain deferred until evidence justifies them.
