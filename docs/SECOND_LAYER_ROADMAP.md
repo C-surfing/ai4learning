@@ -1,8 +1,8 @@
 # Second Layer Roadmap
 
-Do not implement infrastructure here before dogfooding exposes a real need.
+Second-layer infrastructure should normally be earned through real use rather than added speculatively. The Visual Learning Workspace is now an explicit product decision: it is promoted as a **thin learner-facing view over the existing runtime**, while automation that would own teaching or learner-state decisions remains evidence-gated.
 
-This roadmap distinguishes **core teaching capabilities** from **second-layer automation**. A capability such as choosing a useful diagram can belong to the core protocol even when an automated renderer or specialist subagent remains deferred.
+This roadmap distinguishes **core teaching capabilities**, **product surfaces**, and **second-layer automation**. A capability such as choosing a useful diagram can belong to the core protocol, and a workspace can expose learner state, even when an automated renderer or specialist subagent remains deferred.
 
 ## Core now: representation-aware teaching
 
@@ -10,7 +10,31 @@ The teacher may already choose a compact diagram, plot, annotated derivation, te
 
 See [`VISUAL-TEACHING.md`](VISUAL-TEACHING.md).
 
-This does **not** imply that ai4learning should build a visualization platform now.
+A representation is part of teaching when it helps the learner read, predict, reconstruct, or translate a relation. It is not justified by aesthetics alone.
+
+## Product layer now: Visual Learning Workspace
+
+The first learner-facing product surface lives under:
+
+```text
+apps/workspace/
+```
+
+Its purpose is to expose the existing runtime clearly:
+
+```text
+MISSION + ROADMAP + STATE + longitudinal arc metadata
+                         ↓
+              Visual Learning Workspace
+                         ↓
+        map / canvas / evidence / timeline
+```
+
+The workspace is not a second source of learner truth. The current implementation is deliberately read-first: it visualizes local `.learning/` state and limited `.dogfooding/` metadata without silently promoting mastery or rewriting learner-model conclusions.
+
+See [`VISUAL-WORKSPACE.md`](VISUAL-WORKSPACE.md).
+
+The next product step is an authority-aware write / agent bridge that keeps explicit learner edits, agent proposals, evidence-backed accepted state changes, and evaluation records distinct.
 
 ## Layer 1: Learning Memory
 
@@ -35,6 +59,8 @@ review priority
 next learning action
 ```
 
+The workspace may visualize this state, but it must not infer durable learner conclusions merely from UI interaction.
+
 ## Layer 2: Spaced Review
 
 Purpose:
@@ -48,23 +74,20 @@ Rules:
 - prioritize concepts with high dependency centrality;
 - prefer transfer tasks over recognition.
 
-## Layer 3: Visual Roadmap Renderer
+A Review view may exist before a scheduler. Scheduling automation remains deferred until longitudinal evidence supports trigger semantics.
 
-Purpose:
+## Layer 3: Advanced Roadmap Interaction
 
-Turn the existing roadmap semantics into a polished or interactive learner-facing map when real use shows that text / compact diagrams are insufficient.
+The basic roadmap visualization is now part of the Workspace MVP. What remains deferred is product-level editing/automation such as:
 
-Possible output:
+- full-screen graph editing;
+- automatic graph layout persistence;
+- animated roadmap transitions;
+- node-level history/diff;
+- roadmap revision proposals with evidence receipts;
+- large-graph navigation and filtering.
 
-```text
-Knowledge Graph
-      +
-Learner Overlay
-      +
-Current Frontier
-```
-
-The roadmap itself is already core and remains a living hypothesis, not a syllabus. What is deferred here is automated layout, persistence of rendered views, interaction, and product-level visualization.
+The roadmap remains a living dependency hypothesis, not a syllabus or completion chart.
 
 ## Layer 4: Research Agent
 
@@ -82,7 +105,7 @@ teacher synthesis
 learner interaction
 ```
 
-The agent should never replace teaching with a bibliography.
+The Workspace may expose a Source Drawer, but the agent should never replace teaching with a bibliography.
 
 ## Layer 5: Visualization Agent / Rendering Pipeline
 
@@ -111,7 +134,7 @@ required fidelity
 output medium
 ```
 
-Do not create a visualizer subagent merely to improve aesthetics.
+The existence of the Visual Learning Workspace does not itself justify a visualizer subagent.
 
 ## Layer 6: Obsidian / md-log
 
@@ -131,6 +154,6 @@ The source of truth remains the learner state model, not the notes.
 
 ## Promotion rule
 
-Second-layer infrastructure should be promoted only when longitudinal evidence shows a repeated bottleneck that cannot be solved cleanly by the existing teaching runtime.
+Product surfaces may be promoted when they reduce interaction friction while preserving the teaching runtime's authority boundaries. Automation that changes learner state, schedules interventions, generates representations autonomously, or adds specialist agents should still require evidence that the complexity solves a repeated learning bottleneck.
 
 The project should earn operational complexity through demonstrated learning value.
