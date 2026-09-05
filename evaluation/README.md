@@ -38,9 +38,14 @@ These are default evidentiary standards, not rigid scoring rules. Domain evidenc
 
 ## Evaluation artifacts
 
-- `SESSION.md` — one longitudinal session record.
+- `SESSION.md` — one meaningful session record.
+- `ARC.md` — cross-session contract for a longitudinal learning arc.
+- `RUNBOOK.md` — execution procedure for running real dogfooding without turning the learner experience into an evaluation form.
+- `PROMOTION.md` — evidence gate before general Teach/Study protocol changes.
 - `FAILURE-TAXONOMY.md` — classify failures before changing the protocol.
 - `DOMAINS.md` — initial five-domain dogfooding matrix.
+- `REPRESENTATIONS.md` — evaluate whether a representation changed learner capability rather than merely improving presentation.
+- `arcs/` — launch briefs for the five required v0.2 longitudinal arcs.
 
 Real learning state remains in `.learning/`. Evaluation records describe evidence about the runtime and should not be copied into `STATE.md` as transcript history.
 
@@ -51,7 +56,8 @@ Prefer an **arc** over a single conversation:
 ```text
 session 1: establish frontier
 session 2: retrieve + extend
-session 3: transfer + revisit assumptions
+session 3: perturb representation / assumption / context
+session 4: transfer or delayed revisit when needed
 ```
 
 An arc should make it possible to answer:
@@ -62,18 +68,50 @@ An arc should make it possible to answer:
 - Did apparent understanding survive retrieval or transfer?
 - Did the learner become less dependent on the tutor?
 
+A later session must depend on earlier evidence. If the same script could be run unchanged with a new learner, the experiment is not yet testing longitudinal adaptation.
+
+## Recommended execution order
+
+```text
+choose real mission
+    ↓
+pick domain arc brief
+    ↓
+initialize ARC contract
+    ↓
+run Teach / Study normally
+    ↓
+record decisive SESSION evidence
+    ↓
+retrieve later with less scaffolding
+    ↓
+perturb one meaningful dimension
+    ↓
+transfer / revisit
+    ↓
+classify failures
+    ↓
+PROMOTION gate if runtime change is justified
+```
+
+Do not pre-fill success. `insufficient_evidence` is a valid outcome.
+
 ## Promotion rule
 
 Do not add a new rule to `skills/teach/SKILL.md` because one conversation was awkward. First classify the failure and ask whether the smallest fix belongs in:
 
 1. learner-state representation;
-2. teaching-decision logic;
-3. interaction policy;
-4. domain-specific teaching strategy;
-5. persistence / roadmap update behavior;
-6. source / tooling layer.
+2. frontier inference;
+3. teaching-decision logic;
+4. interaction policy;
+5. verification / mastery inference;
+6. roadmap or persistence behavior;
+7. domain-specific teaching strategy;
+8. representation / source / tooling layer.
 
-Promote a protocol change when a failure is repeated across independent sessions or is a clearly structural failure with high consequence. Record the evidence that motivated the change. Avoid case-specific patches, benchmark phrases, topic-specific answer rules, or heuristics that cannot be explained as teaching logic.
+Promote a protocol change when a failure is repeated across independent sessions or is a clearly structural failure with high consequence. Use `PROMOTION.md` to record the generality test, smallest-fix test, overfitting audit, and distinguishing behavioral scenario before changing core rules.
+
+Avoid case-specific patches, benchmark phrases, topic-specific answer rules, or heuristics that cannot be explained as teaching logic.
 
 ## What this is not
 
